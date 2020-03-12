@@ -42,7 +42,7 @@ to quickly create a Cobra application.`,
 		db, err := database.Connect("postgres", "mysecretpassword", "go_login")
 
 		if err != nil {
-			log.Error(err)
+			log.Fatalf("could not connect database detail: %s", err)
 		}
 
 		admin := models.User{Name: "admin", Email: "test@login.com", Password: "mysecretpassword"}
@@ -50,8 +50,8 @@ to quickly create a Cobra application.`,
 		db.Create(&admin)
 
 		// this affect load test
-		engine := gin.New()
-		// engine := gin.Default()
+		// engine := gin.New()
+		engine := gin.Default()
 		route := routes.GetRoutes(engine, db)
 
 		gin.SetMode(gin.ReleaseMode)
