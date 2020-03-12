@@ -5,6 +5,8 @@ import (
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
+	"github.com/jotagesales/pkg/models"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -48,17 +50,16 @@ func NewAuth() *jwt.GinJWTMiddleware {
 			if err := c.ShouldBind(&loginVals); err != nil {
 				return "", jwt.ErrMissingLoginValues
 			}
-			// var user models.User
+			var user models.User
 
-			// db, exists := c.Get("DB")
-			// fmt.Println(db)
-			// fmt.Println(exists)
+			db, _ := c.Keys["DB"].(*gorm.DB)
+			db.Where("email = ? AND password = ?", loginVals.Email, loginVals.Password).Find(&user)
 
-			// fmt.Println(loginVals.Email)
+			if user.Email == "" {
+				return "", jwt.ErrFailedAuthentication
+			}
 
-			// db.Where("email = ?", loginVals.Email).Find(&user)
-			// TODO: added here response if email or password is not valid
-			return &User{Name: "test", Email: "test@login.com"}, nil
+			return &User{Name: user.Name, Email: user.Email}, nil
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
 			return true

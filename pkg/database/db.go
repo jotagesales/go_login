@@ -14,7 +14,7 @@ func Connect(user, password, dbname string) (*gorm.DB, error) {
 	var connectionString = fmt.Sprintf("host=localhost port=5432 user=%s dbname=%s password=%s sslmode=disable", user, dbname, password)
 	log.Debug(connectionString)
 	db, err := gorm.Open("postgres", connectionString)
-	db.LogMode(true)
+	// db.LogMode(true)
 
 	//connection pool
 	db.DB().SetMaxIdleConns(10)

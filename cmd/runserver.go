@@ -40,7 +40,6 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO: not use hard corded for this information, refactor to config
 		db, err := database.Connect("postgres", "mysecretpassword", "go_login")
-		defer db.Close()
 
 		if err != nil {
 			log.Error(err)
@@ -55,6 +54,7 @@ to quickly create a Cobra application.`,
 
 		s := server.NewServer(route, port)
 		server.Runserver(s)
+		defer db.Close()
 	},
 }
 
