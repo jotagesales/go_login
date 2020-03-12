@@ -49,8 +49,12 @@ to quickly create a Cobra application.`,
 		db.AutoMigrate(&models.User{})
 		db.Create(&admin)
 
+		// this affect load test
+		// engine := gin.New()
 		engine := gin.Default()
 		route := routes.GetRoutes(engine, db)
+
+		gin.SetMode(gin.ReleaseMode)
 
 		s := server.NewServer(route, port)
 		server.Runserver(s)
