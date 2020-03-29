@@ -50,8 +50,8 @@ to quickly create a Cobra application.`,
 		db.Create(&admin)
 
 		// this affect load test
-		// engine := gin.New()
-		engine := gin.Default()
+		engine := gin.New()
+		// engine := gin.Default()
 		route := routes.GetRoutes(engine, db)
 
 		gin.SetMode(gin.ReleaseMode)
